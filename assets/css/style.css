@@ -1,0 +1,55 @@
+#container{
+    margin: auto;
+    width: 1400px;
+    height: 900px;
+    background-color: black;
+    border: 8px solid deepskyblue;
+    position: relative;
+}
+
+.line,.line3{
+    position: absolute;
+}
+
+.line{
+    border: solid red 1px;
+    z-index: 1;
+    width: 1px;
+    height: 1px;
+    display: inline-block;
+    background-color: red ;
+    transition: 0.8s;
+}
+
+.line3{
+    border: solid rebeccapurple 1px;
+    z-index: 1;
+    width: 1px;
+    height: 1px;
+    bottom:1px;
+    display: table-column;
+    background-color: rebeccapurple ;
+}
+
+ #countchange,#horverchange,#clearscreen{
+    background-color: blue;
+    color: white;
+    font-size: 24px;
+}
+
+#colorchange{
+    color: white;
+    font-size: 24px;
+}
+
+input.countchange{
+
+}
+#horverchange{
+    background-color: green;
+}
+input.clearscreen{
+
+}
+
+

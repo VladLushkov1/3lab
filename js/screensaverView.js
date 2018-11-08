@@ -4,6 +4,7 @@ var View = function() {
     this.countchangebutton = document.getElementById('countchange');
     this.horverchangebutton = document.getElementById('horverchange');
     this.clearscreenbutton = document.getElementById('clearscreen');
+    this.clickline = null;
 
     this.colorchangeEvent = null;
     this.countchangeEvent = null;
@@ -12,6 +13,72 @@ var View = function() {
 
     this.lineisdrawhor = true;
 };
+
+View.prototype.render = function (obj) {
+    if(this.lineisdrawhor == true)
+    {
+        // заношу в контейнер всю линию
+        var divcont = document.createElement('div');
+        divcont.className = "cont"+obj.zindex;
+        divcont.style.position = "absolute";
+        divcont.style.zIndex = obj.zindex;
+
+        divcont.addEventListener('click', function() {
+            var Children = divcont.children;
+            var randomnumber = Math.floor(Math.random() * (100 - 0)) + 0;
+            var randomcolor = View.prototype.return_random_color();
+            for (var i = 0; i < Children.length; i++)
+            {
+                if( randomnumber % 5 == 0)
+                {
+                    Children[i].style.backgroundColor = View.prototype.return_random_color();
+                    Children[i].style.borderColor = View.prototype.return_random_color();
+                }
+                else{
+                    Children[i].style.backgroundColor = randomcolor
+                    Children[i].style.borderColor = randomcolor;
+                }
+
+
+            }
+    });
+
+        this.clickline = divcont;
+        for(var i=1;i<obj.countline;i++)
+        {
+            var tmp = this;
+            var delay=250;
+            setTimeout(function(i) {
+                return function() {
+                    tmp.drawHorizontal(obj.arrlines[i-1],obj.arrlines[i],obj.color,obj.zIndex,divcont);
+                };
+            }(i), delay*(i));
+        }
+    }
+    else{
+        for(var i=1;i<obj.countline;i++)
+        {
+            var tmp = this;
+            var delay=250;
+            setTimeout(function(i) {
+                return function() {
+                    tmp.drawVerChanged(obj.arrlines[i-1],obj.arrlines[i],obj.color,obj.zIndex);
+                };
+            }(i), delay*(i));
+        }
+    }
+}
+
+View.prototype.return_random_color = function () {
+    var letters = '0123456789ABCDEF';
+    var randomcolor = '#';
+    for (var i = 0; i < 6; i++) {
+        randomcolor += letters[Math.floor(Math.random() * 16)];
+    }
+    return randomcolor;
+}
+
+
 
 View.prototype.init = function () {
     this.colorchangebutton.addEventListener("click", this.colorchangeEvent);
@@ -68,43 +135,23 @@ View.prototype.getcolor = function () {
     return this.colorchangebutton.style.backgroundColor;
 }
 
-View.prototype.render = function (obj) {
-    if(this.lineisdrawhor == true)
-    {
-        for(var i=1;i<obj.countline;i++)
-        {
-            var tmp = this;
-            var delay=250;
-            setTimeout(function(i) {
-                return function() {
-                    tmp.drawHorizontal(obj.arrlines[i-1],obj.arrlines[i],obj.color,obj.zIndex);
-                };
-            }(i), delay*(i));
-        }
-    }
-    else{
-        for(var i=1;i<obj.countline;i++)
-        {
-            var tmp = this;
-            var delay=250;
-            setTimeout(function(i) {
-                return function() {
-                    tmp.drawVerChanged(obj.arrlines[i-1],obj.arrlines[i],obj.color,obj.zIndex);
-                };
-            }(i), delay*(i));
-        }
-    }
 
-}
 
-View.prototype.drawHorizontal =  function (line1,line2,color,zindex) {
+View.prototype.drawHorizontal =  function (line1,line2,color,zindex,divcont) {
     var k =0;
     var difference = line2[0] - line1[0];
+
+    // var divcont = document.createElement('div');
+    // divcont.className = "cont"+zindex;
+    // divcont.style.position = "absolute";
+    // divcont.style.zIndex = zindex;
+
     for(let i=0;i<Math.abs(parseInt(difference/3));i++)
     {
         k = i*3;
         if( difference < 0)
             k = -k;
+
         var div = document.createElement('div');
         div.className = "line";
         div.style.left = line1[0] + k+"px";
@@ -112,14 +159,16 @@ View.prototype.drawHorizontal =  function (line1,line2,color,zindex) {
         div.style.zIndex = zindex;
         div.style.backgroundColor = color;
         div.style.borderColor = color;
-        this.container.appendChild(div);
+
+        divcont.appendChild(div);
+        this.container.appendChild(divcont);
     }
-    this.drawVer(line1,line2,color,zindex);
+    this.drawVer(line1,line2,color,zindex,divcont);
 }
 
-View.prototype.drawVer = function (line1,line2,color,zindex) {
+View.prototype.drawVer = function (line1,line2,color,zindex,divcont) {
+    var k =0;
     var difference = line2[1] - line1[1];
-    var k = 0;
     for(let i=0;i<Math.abs(parseInt(difference/3));i++)
     {
         k = i*3;
@@ -132,7 +181,9 @@ View.prototype.drawVer = function (line1,line2,color,zindex) {
         div.style.zIndex = zindex;
         div.style.backgroundColor = color;
         div.style.borderColor = color;
-        this.container.appendChild(div);
+        divcont.appendChild(div);
+
+        this.container.appendChild(divcont);
     }
 }
 
@@ -175,6 +226,7 @@ View.prototype.drawVerChanged = function (line1,line2,color,zindex) {
     }
     this.drawHorizontalChanged(line1,line2,color,zindex);
 }
+
 var screenView = new View();
 
 

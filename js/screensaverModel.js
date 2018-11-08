@@ -15,6 +15,7 @@ Model.prototype.init = function () {
     this.setcolor();
     this.setcountArr();
     this.setArrayLines();
+
 }
 
 Model.prototype.setcolor = function () {

@@ -14,11 +14,11 @@
 .line{
     border: solid red 1px;
     z-index: 1;
-    width: 1px;
-    height: 1px;
+    width: 5px;
+    height: 5px;
     display: inline-block;
     background-color: red ;
-    transition: 0.8s;
+    /*transition: 0.8s;*/
 }
 
 .line3{

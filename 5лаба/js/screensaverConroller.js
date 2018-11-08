@@ -5,17 +5,8 @@ var Controller = function (View, Model) {
     this.screenView.colorchangeEvent = this.changecolor.bind(this);
     this.screenView.countchangeEvent = this.screenView.changecount.bind();
     this.screenView.horverchangeEvent = this.changehorver.bind(this);
-    this.screenView.clickToCanvasEvent = this.getcoordinats.bind(this);
     this.colorchange = false;
 };
-
-
-Controller.prototype.getcoordinats = function (e) {
-    var x = e.pageX - e.target.offsetLeft,
-        y = e.pageY - e.target.offsetTop;
-    this.screenView.checkLine(x,y);
-    }
-
 
 
 Controller.prototype.init = function() {
@@ -68,11 +59,10 @@ Controller.prototype.needRendering = function(){
 
 var screenController = new Controller(screenView,screenModel);
 
-//screenController.init();
 
 setInterval(function() {
     setInterval(screenController.init(),2000);
-}, 2800);
+}, 2000);
 
 
 

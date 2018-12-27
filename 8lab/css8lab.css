@@ -1,0 +1,49 @@
+body{
+    font-size: 16px;
+}
+
+#content{
+    margin: auto;
+    text-align: center;
+}
+
+#filtr{
+    border: 2px solid gray;
+    background-color: #edebc0;
+}
+
+#elems{
+    border: 2px solid gray;
+    margin-top: 10px;
+    background-color: #e6e6e6;
+}
+
+#filtrradio{
+    margin-bottom: 15px;
+}
+
+#days{
+
+}
+.day{
+    display: inline-block;
+    margin: 10px;
+    margin-left: 100px;
+}
+
+.day_shedule{
+    display: inline-block;
+    width: 250px;
+    border: 2px solid gray;
+}
+
+ul{
+    text-align: left;
+}
+
+input.eyes{
+    height: 40px;
+    width: 280px;
+    font-size: 22px;
+    border: 3px solid red;
+}

@@ -1,0 +1,113 @@
+body {
+
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+#findnote{
+  margin-top: 35px;
+  border: 4px solid yellow;
+  border-radius: 10px;
+  width: 380px;
+  text-align: center;
+  margin-top: 15px;
+  float: right;
+
+}
+
+#information{
+  display: inline-block;
+  height: 200px;
+  vertical-align: top;
+}
+
+.note{
+
+  margin-top: 35px;
+  border: 4px solid yellow;
+  border-radius: 10px;
+  width: 380px;
+  text-align: center;
+  margin-top: 15px;
+
+}
+li{
+  list-style-type: none;
+}
+
+img{
+  width: 80px;
+  height: 80px;
+}
+
+li:nth-child(3n+1) {
+background-color: orange;
+font-weight: 600;
+}
+
+li:nth-child(3n+2) {
+background-color: lightgreen;
+font-weight: 600;
+}
+
+li:nth-child() {
+background-color: #a7d3f0;
+}
+
+li:nth-child(3n+1) {
+margin-top: 15px;
+}
+
+
+button.deletebutton{
+  background: white;
+  color: black;
+  font-weight: 700;
+}
+
+#footer{
+  margin: auto;
+  height: 100px;
+  background-color:#501d73;
+}
+
+.main{
+  background-color:  #a7d3f0;
+}
+
+.textnote{
+  width: 380px;
+  height: 200px;
+  background-color: #a7d3f0;
+  margin-top: 2px;
+  font-weight: 500;
+  float: right;
+}
+
+#header{
+  margin: auto;
+  background-color:#501d73;
+  color:white;
+  font-weight: 600;
+  text-align: center;
+  height: 80px;
+}
+
+.left{
+  margin: auto;;
+  background-color:#9999ff;
+  float: left;
+
+}
+
+.right{
+  float: left;
+}

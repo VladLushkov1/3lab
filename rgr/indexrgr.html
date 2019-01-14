@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Xonix</title>
+
+    <script src="https://music.yandex.ru/api/audio/dist/index.js"></script>
+
+
+    <link rel="stylesheet/less" type="text/css" href="assets/css/styles.less">
+    <script src="js/less.min.js" type="text/javascript"></script>
+    <link rel="stylesheet/less" type="text/css" href="assets/css/styles.css">
+
+
+
+</head>
+<body>
+
+<div id="container">
+    <canvas id="myCanvas">
+    </canvas>
+</div>
+
+<div id="data">
+    <div id="scores">
+        <p class="hh"> Очки:</p>
+        <div id="scorestext"> </div>
+
+    </div>
+    <div id ="fill">
+        <p class="hh"> Заполнено:</p>
+        <div id="filltext"></div>
+    </div>
+</div>
+
+<div id="player">
+    <img id="play" src="assets/img/play.png">
+    <img id="pause" src="assets/img/pause.png">
+</div>
+
+
+<script src="js/xonixModel.js"></script>
+<script src="js/xoniView.js"></script>
+<script src="js/xonixController.js"></script>
+
+
+</body>
+</html>

@@ -392,14 +392,14 @@ function getboard(Map,i,j) {
     var xx = j % 60;
     var yy = Math.floor(j / 60);
 
-    if( x == xx)
-    {
-        alert("horiz " + x + " " + y + " " + xx + " " + yy);
-    }
-    if( y == yy)
-    {
-        alert("vertic " + x + " " + y + " " + xx + " " + yy);
-    }
+    // if( x == xx)
+    // {
+    //     alert("horiz " + x + " " + y + " " + xx + " " + yy);
+    // }
+    // if( y == yy)
+    // {
+    //     alert("vertic " + x + " " + y + " " + xx + " " + yy);
+    // }
 }
 
 Model.prototype.returnxy = function(number){
@@ -527,15 +527,27 @@ Model.prototype.getCaptureCells = function (temporalCells,Map){
     var sizeA = this.getSize(Map,3);
     var sizeB = this.getSize(Map,4);
 
+    var ballx =  Math.floor((this.objs.ball.x - ( this.objs.ball.x % 10 )) / 10) ;
+    var bally = (this.objs.ball.y - ( this.objs.ball.y % 10 )) / 10;
+    var ball_cell = Map[60*bally + ballx];
+
+
+
+
+
     this.getOtherCaptureCells(temporalCells,Map,3);
     this.getOtherCaptureCells(temporalCells,Map,4);
 
+
     var counter = 0;
+
+
+
     for(var i=0;i<60;i++)
     {
         for(var j =0 ; j < 40;j++)
         {
-            if( sizeA > sizeB)
+            if( ball_cell == 3)
             {
                 if(Map[60*j+i] == 4) Map[60*j+i] = 0;
                 if(Map[60*j+i] == 3) Map[60*j+i] = 1;
@@ -549,6 +561,11 @@ Model.prototype.getCaptureCells = function (temporalCells,Map){
             if(Map[60*j+i] == 0) counter++;
         }
     }
+
+
+
+
+
     counter = counter - (2400 - 1836);
     this.objs.scores += counter*10;
     this.objs.fill = Math.floor((counter / (1836)) *100);

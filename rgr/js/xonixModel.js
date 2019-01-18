@@ -17,8 +17,9 @@ var row = [-1,-1,-1,0,0,1,1,1];
 var col = [-1,0,1,-1,1,-1,0,1];
 
 // 0 суша , 1 море
-
 var Model = function () {
+    this.levelnumber = 1;
+    this.lives = 3;
     this.scores = 0;
     this.fill = 0;
     this.Map = null;
@@ -36,15 +37,22 @@ var Model = function () {
         'ball': {
             x: 100,
             y: 100,
-            speedx: 3,
-            speedy: 3,
+            speedx: STEP_BALL,
+            speedy: STEP_BALL,
             angle:45
         },
         'ball2': {
             x: 35,
             y: 15,
-            speedx: 3,
-            speedy: 3,
+            speedx: STEP_BALL*1,
+            speedy: -(STEP_BALL*2),
+            angle:45
+        },
+        'ball3': {
+            x: 350,
+            y: 390,
+            speedx: -(STEP_BALL*2),
+            speedy: STEP_BALL*1,
             angle:45
         },
         'pointer': {
@@ -59,7 +67,6 @@ var Model = function () {
         'Map':{
             array: null
         }
-
     };
 };
 
@@ -72,6 +79,8 @@ Model.prototype.init = function (renderFunction) {
     this.objs.ff = [0,0];
     this.objs.scores = 0;
     this.objs.fill = 0;
+    this.objs.lives = 3;
+    this.objs.levelnumber = 1;
     this.objs.flagball2 = false;
     this.initMap();
     this.objs.lastmove = null;
@@ -155,6 +164,7 @@ Model.prototype.initMap = function () {
 Model.prototype.ballcollisionTemporal = function (x_ , y_,ball) {
     this.objs.pointer.x = 0;
     this.objs.pointer.y = 0;
+    this.objs.lives += -1;
 
     for(var i=0;i<this.objs.temporalCells.length;i++)
     {
@@ -250,6 +260,9 @@ Model.prototype.checkBallCollision = function (ball , Map) {
 Model.prototype.checkBallCollision2 = function (ball , Map) {
     var xp = this.objs.pointer.x;
     var yp = this.objs.pointer.y;
+
+
+
     var xxp = (xp - ( xp % 10 )) / 10;
     var yyp = (yp - ( yp % 10 )) / 10;
 
@@ -310,6 +323,7 @@ Model.prototype.checkBallCollision2 = function (ball , Map) {
         var random_x = Math.floor(Math.random() * (590 - 10) + 10);
         this.objs.pointer.x = random_x;
         this.objs.pointer.y = 15;
+        this.objs.lives += -1;
 
     }
 
@@ -392,14 +406,7 @@ function getboard(Map,i,j) {
     var xx = j % 60;
     var yy = Math.floor(j / 60);
 
-    // if( x == xx)
-    // {
-    //     alert("horiz " + x + " " + y + " " + xx + " " + yy);
-    // }
-    // if( y == yy)
-    // {
-    //     alert("vertic " + x + " " + y + " " + xx + " " + yy);
-    // }
+
 }
 
 Model.prototype.returnxy = function(number){
@@ -490,6 +497,32 @@ Model.prototype.getOtherCaptureCells = function (temporalCells , Map , color) {
     }
 }
 
+
+Model.prototype.setMap = function (Map ,ball_cell) {
+    var counter = 0;
+    for(var i=0;i<60;i++)
+    {
+        for(var j =0 ; j < 40;j++)
+        {
+            if( ball_cell == 3)
+            {
+                if(Map[60*j+i] == 4) Map[60*j+i] = 0;
+                if(Map[60*j+i] == 3) Map[60*j+i] = 1;
+            }
+            else {
+                if(Map[60*j+i] == 4) Map[60*j+i] = 1;
+                if(Map[60*j+i] == 3) Map[60*j+i] = 0;
+            }
+            if(Map[60*j+i] == 2) Map[60*j+i] = 0;
+
+            if(Map[60*j+i] == 0) counter++;
+        }
+    }
+    counter = counter - (2400 - 1836);
+    this.objs.scores += counter*10;
+    this.objs.fill = Math.floor((counter / (1836)) *100);
+}
+
 Model.prototype.getCaptureCells = function (temporalCells,Map){
     var array = Array();
     var MaxY = -999;
@@ -529,46 +562,20 @@ Model.prototype.getCaptureCells = function (temporalCells,Map){
 
     var ballx =  Math.floor((this.objs.ball.x - ( this.objs.ball.x % 10 )) / 10) ;
     var bally = (this.objs.ball.y - ( this.objs.ball.y % 10 )) / 10;
+
     var ball_cell = Map[60*bally + ballx];
-
-
-
-
 
     this.getOtherCaptureCells(temporalCells,Map,3);
     this.getOtherCaptureCells(temporalCells,Map,4);
 
 
-    var counter = 0;
 
 
-
-    for(var i=0;i<60;i++)
-    {
-        for(var j =0 ; j < 40;j++)
-        {
-            if( ball_cell == 3)
-            {
-                if(Map[60*j+i] == 4) Map[60*j+i] = 0;
-                if(Map[60*j+i] == 3) Map[60*j+i] = 1;
-            }
-            else {
-                if(Map[60*j+i] == 4) Map[60*j+i] = 1;
-                if(Map[60*j+i] == 3) Map[60*j+i] = 0;
-            }
-            if(Map[60*j+i] == 2) Map[60*j+i] = 0;
-
-            if(Map[60*j+i] == 0) counter++;
-        }
-    }
+    this.setMap(Map , ball_cell);
 
 
 
 
-
-    counter = counter - (2400 - 1836);
-    this.objs.scores += counter*10;
-    this.objs.fill = Math.floor((counter / (1836)) *100);
 }
 
 Model.prototype.checkTemporalArray = function (pointer,Map) {
@@ -615,14 +622,6 @@ Model.prototype.checkTemporalArray = function (pointer,Map) {
                     }
                 }
 
-                // if( Map[60*(yy-1) + xx +1] == 2)
-                // {
-                //     if(Map[60*(yy) + xx+1 ] !=2)
-                //     {
-                //         Map[60*(yy) + xx + 1 ] = 2;
-                //     }
-                // }
-
             }
 
             this.getCaptureCells(this.objs.temporalCells,Map);
@@ -656,11 +655,25 @@ Model.prototype.checknextlvl = function () {
     {
         this.objs.flagball2 = true;
     }
+    if(this.objs.lives == 0)
+    {
+        STEP_POINT = 0;
+        STEP_BALL = 0;
+        this.objs.ball.speedx = 0;
+        this.objs.ball.speedy = 0;
+        this.objs.ball2.speedx = 0;
+        this.objs.ball2.speedy = 0;
+        this.objs.ball3.speedx = 0;
+        this.objs.ball3.speedy = 0;
+        return;
+    }
     if(this.objs.fill > 70)
     {
         this.NextLvlMusic();
         STEP_POINT ++;
         STEP_BALL ++;
+        this.objs.levelnumber++;
+
         this.objs.pointer.x = 0;
         this.objs.pointer.y = 0;
         for(var i=0;i<this.objs.temporalCells.length;i++)
@@ -680,15 +693,53 @@ Model.prototype.checknextlvl = function () {
         this.objs.fill = 0;
         this.initMap();
         this.objs.flagball2 = false;
-        alert("Сложность увнличена");
-        if(STEP_POINT >= 5 && STEP_BALL >= 5)
+        if(this.objs.levelnumber == 4)
         {
-            STEP_POINT = 2;
-            STEP_BALL = 2;
+            this.Restartgame(true);
+            return;
         }
+        alert("Сложность увнличена");
     }
+
+
 }
 
+
+Model.prototype.Restartgame = function (flag) {
+    this.objs.levelnumber = 1;
+    this.objs.lives = 3;
+    this.objs.pointer.x = 0;
+    this.objs.pointer.y = 0;
+    this.objs.ball.x = 100;
+    this.objs.ball.y =  100;
+    this.objs.ball2.x = 35;
+    this.objs.ball2.y =  15;
+    this.objs.ball3.x = 350;
+    this.objs.ball3.y =  390;
+
+    this.objs.temporalCells = [];
+    this.objs.firstCell = null;
+    this.objs.lastCell = null;
+    this.objs.ff = [];
+    this.objs.prevx = null;
+    this.objs.prevy = null;
+
+    STEP_BALL = 2;
+    STEP_POINT = 2;
+    this.objs.ball.speedx = STEP_BALL;
+    this.objs.ball.speedy = STEP_BALL;
+    this.objs.ball2.speedx = -2*STEP_BALL;
+    this.objs.ball2.speedy = STEP_BALL;
+    this.objs.ball3.speedx = STEP_BALL;
+    this.objs.ball3.speedy = -2*STEP_BALL;
+
+    if(flag == false)
+    {
+        this.objs.fill = 0;
+        this.objs.scores = 0;
+    }
+    this.initMap();
+}
 
 
 Model.prototype.PlayMusic = function () {
@@ -731,12 +782,22 @@ Model.prototype.movingpointer = function () {
     xonixModel.checkBallCollision(xonixModel.objs.ball , xonixModel.objs.Map);
     xonixModel.checkPointerCollision(xonixModel.objs.pointer,xonixModel.objs.Map);
     xonixModel.setcoordPointer();
+
+
     xonixModel.setcoordBall(xonixModel.objs.ball);
-    if(xonixModel.objs.flagball2 == true)
+    if(xonixModel.objs.levelnumber >= 2)
     {
         xonixModel.checkBallCollision2(xonixModel.objs.ball2 , xonixModel.objs.Map);
         xonixModel.setcoordBall(xonixModel.objs.ball2);
+        if(xonixModel.objs.levelnumber == 3)
+        {
+            xonixModel.checkBallCollision2(xonixModel.objs.ball3 , xonixModel.objs.Map);
+            xonixModel.setcoordBall(xonixModel.objs.ball3);
+        }
     }
+
+
+
     requestAnimationFrame(xonixModel.movingpointer);
 }
 

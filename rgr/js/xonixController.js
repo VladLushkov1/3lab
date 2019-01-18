@@ -4,6 +4,7 @@ var Controller = function (View, Model) {
 
     this.xonixView.playEvent = this.play.bind(this);
     this.xonixView.pauseEvent = this.pause.bind(this);
+    this.xonixView.restartEvent = this.restart.bind(this);
 
     this.flagpause = false;
 };
@@ -24,6 +25,10 @@ Controller.prototype.reinit = function () {
     this.needRendering();
 };
 
+
+Controller.prototype.restart = function () {
+    this.xonixModel.Restartgame(false);
+}
 
 
 Controller.prototype.play = function () {

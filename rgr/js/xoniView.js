@@ -2,17 +2,31 @@
 var View = function() {
     this.canvas = document.getElementById("myCanvas");
     this.ctx = this.canvas.getContext('2d');
+
+    this.canvaslives = document.getElementById("lives");
+    this.ctxlives = this.canvaslives.getContext('2d');
+
+    this.img = null;
+
+    this.canvaslives.width = 300;
+    this.canvaslives.height = 30;
+
+
+
     this.canvas.width = 600;
     this.canvas.height = 400;
     this.onKeyDownEvent = null;
     this.playbut = document.getElementById('play');
     this.pausebut = document.getElementById('pause');
     this.stopbut = document.getElementById('stop');
+    this.restartbut = document.getElementById('restartbutton');
 
     this.playEvent = null;
     this.pauseEvent = null;
     this.stopEvent = null;
+    this.restartEvent = null;
     this.image = null;
+    this.textlevel = "Уровень 1";
 
 
 };
@@ -27,28 +41,65 @@ View.prototype.randomColor = function () {
 }
 
 View.prototype.init = function () {
+    this.img = new Image();
+    this.img.src = "assets/img/heart.png";
     document.addEventListener('keydown', this.onKeyDownEvent);
     this.playbut.addEventListener("click", this.playEvent);
     this.pausebut.addEventListener("click", this.pauseEvent);
-
-    // this.image = new Image();
-    // this.image.src = 'assets/img/ball2.png';
+    this.restartbut.addEventListener("click", this.restartEvent);
 
 };
 
 View.prototype.render = function (objs) {
     this.ctx.clearRect(0, 0, 600, 400);
-
+    this.ctxlives.clearRect(0, 0, 300, 30);
     this.renderMap(objs);
+    this.ctxlives.font = "22px serif";
 
-    if(objs.flagball2 == true)
+    if(objs.levelnumber == 1)
+        this.textlevel = "Уровень 1";
+    if(objs.levelnumber == 2)
+        this.textlevel = "Уровень 2";
+    if(objs.levelnumber == 3)
+        this.textlevel = "Уровень 3";
+
+
+
+    if(objs.levelnumber >= 2)
+    {
         this.renderBall(objs.ball2);
+        if(objs.levelnumber == 3){
+            this.renderBall(objs.ball3);
+        }
+    }
+
+
 
     this.renderBall(objs.ball);
     this.renderpointer(objs);
+    this.renderlives(objs);
     this.setText(objs);
+    this.ctxlives.fillText(this.textlevel,100,25);
+
 
 };
+
+View.prototype.renderlives = function (obj) {
+    if(obj.lives == 0)
+    {
+        this.textlevel = "Вы проиграли";
+        this.restartbut.style.visibility = "visible";
+    }
+    else {
+        this.restartbut.style.visibility = "hidden";
+    }
+
+
+    for(var i=0;i < obj.lives ; i++)
+    {
+        this.ctxlives.drawImage(this.img,10 + i*25,0 ,20,20);
+    }
+}
 
 View.prototype.setText = function (objs) {
     var scores = document.getElementById("scorestext");
@@ -125,17 +176,6 @@ View.prototype.renderMap = function (objs) {
 
         }
     }
-    // if(objs.ff[0] != 0)
-    // {
-    //     var x = objs.ff[0];
-    //     var y =  objs.ff[1];
-    //     var xx = (x - ( x % 10 )) / 10;
-    //     var yy = (y - ( y % 10 )) / 10;
-    //     this.ctx.fillStyle = 'rgb(0, 0, 255)';
-    //     this.ctx.fillRect(xx*10, yy*10, xx*10 + 9, yy*10 + 9);
-    //     this.ctx.stroke();
-    // }
-
     this.ctx.strokeStyle = 'rgb(51, 204, 255)';
 }
 
